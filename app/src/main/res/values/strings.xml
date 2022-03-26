@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">NewsAPI</string>
+    <string name="api_key">70b7c9e7df174143a8da0be058cdde04</string>
+    <string name="favorite"></string>
+
+    <!--category-->
+    <string name="business">business</string>
+    <string name="entertainment">entertainment</string>
+    <string name="general">general</string>
+    <string name="health">health</string>
+    <string name="science">science</string>
+    <string name="sports">sports</string>
+    <string name="technology">technology</string>
+
+
+
+</resources>
