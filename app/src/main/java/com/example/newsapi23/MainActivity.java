@@ -5,100 +5,81 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.newsapi23.Models.CustomAdapter;
-import com.example.newsapi23.Models.NewsApiResponce;
-import com.example.newsapi23.Models.NewsHeadlines;
+import com.example.newsapi23.domen.Headlines;
+import com.example.newsapi23.domen.NewsHeadlines;
+import com.example.newsapi23.ui.NewsRecycleAdapter;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SelectListener, View.OnClickListener {
     RecyclerView recyclerView;
-    CustomAdapter adapter;
-    Button btn1, btn2, btn3, btn4, btn5, btn6, btn7;
-    SearchView searchView;
+    NewsRecycleAdapter adapter; // создает превью, строчку новости.
+    Button btnBusinessField, btnEntertainmentField, btnGeneralField, btnHealthField, btnScienceField, btnSportField, btnTechnologyField;
+    SearchView searchView; // вьюшка для поика
+    MainViewModel viewModel; // контэйнер состояния, всех данных
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class); //создает менеджер для получения вьюмодел с данными
+        viewModel.newsData.observe(this, this::showNews); //все запросы беруться из viewModel
         searchView = findViewById(R.id.search);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() { //слушатель поля ввода поиска
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                RequestManager manager = new RequestManager(MainActivity.this);
-                manager.getNewsHeadlines(listener, "general", query);
+            public boolean onQueryTextSubmit(String query) {  //слушатель кнопки поиска
+                viewModel.search(query);
                 return true;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public boolean onQueryTextChange(String newText) { //слушатель изменение в поле ввода текста поиска
                 return false;
             }
         });
 
-        RequestManager manager = new RequestManager(this);
-        manager.getNewsHeadlines(listener, "general", null);
+        btnBusinessField = findViewById(R.id.btn_business);
+        btnBusinessField.setOnClickListener(this);
+        btnEntertainmentField = findViewById(R.id.btn_entertainment);
+        btnEntertainmentField.setOnClickListener(this);
+        btnGeneralField = findViewById(R.id.btn_general);
+        btnGeneralField.setOnClickListener(this);
+        btnHealthField = findViewById(R.id.btn_health);
+        btnHealthField.setOnClickListener(this);
+        btnScienceField = findViewById(R.id.btn_science);
+        btnScienceField.setOnClickListener(this);
+        btnSportField = findViewById(R.id.btn_sport);
+        btnSportField.setOnClickListener(this);
+        btnTechnologyField = findViewById(R.id.btn_technology);
+        btnTechnologyField.setOnClickListener(this);
 
-        btn1 = findViewById(R.id.btn_1);
-        btn1.setOnClickListener(this);
-        btn2 = findViewById(R.id.btn_2);
-        btn2.setOnClickListener(this);
-        btn3 = findViewById(R.id.btn_3);
-        btn3.setOnClickListener(this);
-        btn4 = findViewById(R.id.btn_4);
-        btn4.setOnClickListener(this);
-        btn5 = findViewById(R.id.btn_5);
-        btn5.setOnClickListener(this);
-        btn6 = findViewById(R.id.btn_6);
-        btn6.setOnClickListener(this);
-        btn7 = findViewById(R.id.btn_7);
-        btn7.setOnClickListener(this);
-
-    }
-
-    private final OnFetchDataListener<NewsApiResponce> listener = new OnFetchDataListener<NewsApiResponce>() {
-        @Override
-        public void onFetchData(List<NewsHeadlines> list, String message) {
-            if(list.isEmpty()){
-                Toast.makeText(MainActivity.this, "This query wasn't found", Toast.LENGTH_SHORT).show();
-            }
-            showNews(list);
-
-        }
-
-        @Override
-        public void onError(String message) {
-            Toast.makeText(MainActivity.this, "Incorrect query", Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    private void showNews(List<NewsHeadlines> list) {
         recyclerView = findViewById(R.id.recycler_main);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
-        adapter = new CustomAdapter(this, list, this);
+        adapter = new NewsRecycleAdapter(this, this);
         recyclerView.setAdapter(adapter);
-
     }
 
+    private void showNews(List<NewsHeadlines> list) {
+        if(list.isEmpty()){
+            Toast.makeText(this, "News is empty", Toast.LENGTH_SHORT).show();
+        } else {
+            adapter.setNews(list);
+        }
+    }
 
     @Override
-    public void OnNewsClikced(NewsHeadlines headlines) {
+    public void onNewsClicked(NewsHeadlines headlines) {
         Intent main = new Intent(MainActivity.this, DetailsActivity.class);
-        Log.i("Detail", headlines.toString());
         main.putExtra("data", headlines.getUrl());
         startActivity(main);
     }
@@ -107,8 +88,6 @@ public class MainActivity extends AppCompatActivity implements SelectListener, V
     public void onClick(View view) {
         Button btn = (Button) view;
         String category = btn.getText().toString();
-
-        RequestManager manager = new RequestManager(this);
-        manager.getNewsHeadlines(listener, category, null);
+        viewModel.searchCategory(category); // беру текст  кнопки и вставляю её в поик категорий
     }
 }

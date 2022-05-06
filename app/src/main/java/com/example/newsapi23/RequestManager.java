@@ -1,9 +1,8 @@
 package com.example.newsapi23;
 
 import android.content.Context;
-import android.widget.Toast;
 
-import com.example.newsapi23.Models.NewsApiResponce;
+import com.example.newsapi23.domen.Headlines;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -15,29 +14,29 @@ import retrofit2.http.Query;
 
 
 public class RequestManager {
-    Context context;
 
     Retrofit retrofit = new Retrofit.Builder().baseUrl("https://newsapi.org/v2/").addConverterFactory(GsonConverterFactory.create()).build();
 
-    public void getNewsHeadlines(OnFetchDataListener listener, String category, String query) {
-        CallNewsApi callNewsApi = retrofit.create(CallNewsApi.class);
-        Call<NewsApiResponce> call = callNewsApi.callHeadlines("us", category, query, context.getString(R.string.api_key));
+    public void getNewsHeadlines(RequestManagerListener listener, String category, String query) {
+        NewsApi callNewsApi = retrofit.create(NewsApi.class);
+
+        Call<Headlines> call = callNewsApi.getHeadlines("us", category, query, BuildConfig.API_KEY);
 
         try {
-            call.enqueue(new Callback<NewsApiResponce>() {
+            call.enqueue(new Callback<Headlines>() {
                 @Override
-                public void onResponse(Call<NewsApiResponce> call, Response<NewsApiResponce> response) {
-                    if (!response.isSuccessful()){
-                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
+                public void onResponse(Call<Headlines> call, Response<Headlines> response) {
+//                    if (!response.isSuccessful()){
+//                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show(); сделать эту проверкку при получении, снаружи
+//
+//                    }
 
-                    }
-
-                    listener.onFetchData(response.body().getArticles(), response.message());
+                    listener.onSuccess(response.body().getArticles(), response.message());
 
                 }
 
                 @Override
-                public void onFailure(Call<NewsApiResponce> call, Throwable t) {
+                public void onFailure(Call<Headlines> call, Throwable t) {
                     listener.onError("Request Failed");
                 }
             });
@@ -46,13 +45,11 @@ public class RequestManager {
         }
     }
 
-    public RequestManager(Context context) {
-        this.context = context;
-    }
 
-    public interface CallNewsApi {
+
+    public interface NewsApi {
         @GET ("top-headlines")
-        Call<NewsApiResponce> callHeadlines(
+        Call<Headlines> getHeadlines(
                 @Query("country") String country,
                 @Query("category") String category,
                 @Query("q") String query,
