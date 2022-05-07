@@ -30,11 +30,9 @@ public class RequestManager {
 //                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show(); сделать эту проверкку при получении, снаружи
 //
 //                    }
-
                     listener.onSuccess(response.body().getArticles(), response.message());
 
                 }
-
                 @Override
                 public void onFailure(Call<Headlines> call, Throwable t) {
                     listener.onError("Request Failed");
@@ -44,8 +42,6 @@ public class RequestManager {
             e.printStackTrace();
         }
     }
-
-
 
     public interface NewsApi {
         @GET ("top-headlines")

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.SearchView;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.newsapi23.domen.Headlines;
+import com.example.newsapi23.domen.ListNewsHeadlines;
 import com.example.newsapi23.domen.NewsHeadlines;
 import com.example.newsapi23.ui.NewsRecycleAdapter;
 
@@ -27,13 +29,14 @@ public class MainActivity extends AppCompatActivity implements SelectListener, V
     Button btnBusinessField, btnEntertainmentField, btnGeneralField, btnHealthField, btnScienceField, btnSportField, btnTechnologyField;
     SearchView searchView; // вьюшка для поика
     MainViewModel viewModel; // контэйнер состояния, всех данных
+    private static List<ListNewsHeadlines> mFavoriteNews;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class); //создает менеджер для получения вьюмодел с данными
-        viewModel.newsData.observe(this, this::showNews); //все запросы беруться из viewModel
+
         searchView = findViewById(R.id.search);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() { //слушатель поля ввода поиска
             @Override
@@ -63,25 +66,48 @@ public class MainActivity extends AppCompatActivity implements SelectListener, V
         btnTechnologyField = findViewById(R.id.btn_technology);
         btnTechnologyField.setOnClickListener(this);
 
+        setupViewModel();
+
         recyclerView = findViewById(R.id.recycler_main);
         recyclerView.setHasFixedSize(true);
         adapter = new NewsRecycleAdapter(this, this);
         recyclerView.setAdapter(adapter);
     }
 
-    private void showNews(List<NewsHeadlines> list) {
-        if(list.isEmpty()){
-            Toast.makeText(this, "News is empty", Toast.LENGTH_SHORT).show();
-        } else {
-            adapter.setNews(list);
-        }
+    private void setupViewModel() {
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class); //создает менеджер для получения вьюмодел с данными
+        viewModel.newsData.observe(this, this::showNews);/*new Observer<List<ListNewsHeadlines>>() { //все запросы беруться из viewModel
+
+            @Override
+            public void onChanged (List <ListNewsHeadlines> newsEntries) {
+                mFavoriteNews = newsEntries;
+                for (int i = 0; i < mFavoriteNews.size(); i++) {
+                    mFavoriteNews.get(i).setFavoriteStatus(true);
+                }
+                adapter.setNews(mFavoriteNews);
+            }
+        });*/
     }
 
+        private void showNews (List < ListNewsHeadlines > list) {
+            if (list.isEmpty()) {
+                Toast.makeText(this, "News is empty", Toast.LENGTH_SHORT).show();
+            } else {
+                adapter.setNews(list);
+            }
+        }
+
+
     @Override
-    public void onNewsClicked(NewsHeadlines headlines) {
+    public void onNewsClicked(ListNewsHeadlines headlines) {
         Intent main = new Intent(MainActivity.this, DetailsActivity.class);
         main.putExtra("data", headlines.getUrl());
         startActivity(main);
+    }
+
+    @Override
+    public void setFavorite(ListNewsHeadlines newsHeadlines, boolean isFavorite) {
+        viewModel.setFavorite(newsHeadlines, isFavorite);
     }
 
     @Override

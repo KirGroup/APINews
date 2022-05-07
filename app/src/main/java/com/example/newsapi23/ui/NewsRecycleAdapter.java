@@ -3,20 +3,14 @@ package com.example.newsapi23.ui;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.newsapi23.R;
 import com.example.newsapi23.SelectListener;
-import com.example.newsapi23.domen.NewsHeadlines;
-import com.example.newsapi23.domen.NewsListner;
+import com.example.newsapi23.domen.ListNewsHeadlines;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -29,7 +23,7 @@ public class NewsRecycleAdapter extends RecyclerView.Adapter<CustomViewHolder> {
     private boolean isLiked;
 
     private final Context context;
-    private List<NewsHeadlines> headlines = new ArrayList<>();
+    private List<ListNewsHeadlines> headlines = new ArrayList<>();
     private final SelectListener listener;
 
     public NewsRecycleAdapter(Context context, SelectListener listener) {
@@ -52,6 +46,9 @@ public class NewsRecycleAdapter extends RecyclerView.Adapter<CustomViewHolder> {
             Picasso.get().load(headlines.get(position).getUrlToImage()).into(holder.img_headline);
         }
         holder.cardview.setOnClickListener(view -> listener.onNewsClicked(headlines.get(position)));
+        holder.favoriteButton.setOnClickListener(view -> listener.setFavorite(headlines.get(position), holder.favoriteButton.isChecked())); //
+        holder.favoriteButton.setChecked(headlines.get(position).isFavorite()); //утанавливаем значение значку избранное. Если избранное, то подсвечиваем. Если не избранное, выключаем.
+        holder.favoriteButton.jumpDrawablesToCurrentState(); //пропуск анимации при прокручивании вью
     }
 
     @Override
@@ -60,7 +57,7 @@ public class NewsRecycleAdapter extends RecyclerView.Adapter<CustomViewHolder> {
         return headlines.size();
     }
 
-    public void setNews(List<NewsHeadlines> list) {
+    public void setNews(List<ListNewsHeadlines> list) {
         headlines = list;
         notifyDataSetChanged();  //обновил список, поле иницилизации
     }
