@@ -1,16 +1,47 @@
-package com.example.newsapi23.Models;
+package com.example.newsapi23.domen;
+
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
+@Entity
 public class NewsHeadlines implements Serializable {
-    Source source = null;
-    String autor = "";
-    String title = "";
-    String description = "";
-    String url = "";
-    String urlToImage = "";
-    String publishedAt = "";
-    String content = "";
+    @Ignore
+    private Source source = null;
+    private String autor = "";
+    private String title = "";
+    private String description = "";
+    @NonNull @PrimaryKey
+    private String url = "";
+    private String urlToImage = "";
+    private String publishedAt = "";
+    private String content = "";
+    @Ignore
+    private boolean favoriteStatus = false;
+
+    public NewsHeadlines(Source source, String autor, String title, String description, String url, String urlToImage, String publishedAt, String content) {
+        this.source = source;
+        this.autor = autor;
+        this.title = title;
+        this.description = description;
+        this.url = url;
+        this.urlToImage = urlToImage;
+        this.publishedAt = publishedAt;
+        this.content = content;
+    }
+
+    public NewsHeadlines(String autor, String title, String description, String url, String urlToImage, String publishedAt, String content) {
+        this.autor = autor;
+        this.title = title;
+        this.description = description;
+        this.url = url;
+        this.urlToImage = urlToImage;
+        this.publishedAt = publishedAt;
+        this.content = content;
+    }
 
     public Source getSource() {
         return source;
@@ -75,6 +106,10 @@ public class NewsHeadlines implements Serializable {
     public void setContent(String content) {
         this.content = content;
     }
+
+    public boolean getFavoriteStatus() {return favoriteStatus;}
+
+    public void setFavoriteStatus(boolean status) {this.favoriteStatus = status;}
 
     @Override
     public String toString() {

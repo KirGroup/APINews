@@ -18,10 +18,6 @@ import java.util.List;
 
 public class NewsRecycleAdapter extends RecyclerView.Adapter<CustomViewHolder> {
 
-    public static final String ACTION_LIKE_IMAGE_CLICKED = "action_like_image_button";
-    private int changedItemPosition;
-    private boolean isLiked;
-
     private final Context context;
     private List<ListNewsHeadlines> headlines = new ArrayList<>();
     private final SelectListener listener;
@@ -40,15 +36,14 @@ public class NewsRecycleAdapter extends RecyclerView.Adapter<CustomViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.text_title.setText(headlines.get(position).getTitle());
-        holder.text_source.setText(headlines.get(position).getSource().getName());
 
         if(headlines.get(position).getUrlToImage()!=null){
             Picasso.get().load(headlines.get(position).getUrlToImage()).into(holder.img_headline);
         }
         holder.cardview.setOnClickListener(view -> listener.onNewsClicked(headlines.get(position)));
         holder.favoriteButton.setOnClickListener(view -> listener.setFavorite(headlines.get(position), holder.favoriteButton.isChecked())); //
-        holder.favoriteButton.setChecked(headlines.get(position).isFavorite()); //утанавливаем значение значку избранное. Если избранное, то подсвечиваем. Если не избранное, выключаем.
-        holder.favoriteButton.jumpDrawablesToCurrentState(); //пропуск анимации при прокручивании вью
+        holder.favoriteButton.setChecked(headlines.get(position).isFavorite()); //set the value of the favorites icon. If favorites, then highlight. If not favorites, turn it off
+        holder.favoriteButton.jumpDrawablesToCurrentState(); //skipping animations when scrolling the view
     }
 
     @Override
@@ -59,6 +54,6 @@ public class NewsRecycleAdapter extends RecyclerView.Adapter<CustomViewHolder> {
 
     public void setNews(List<ListNewsHeadlines> list) {
         headlines = list;
-        notifyDataSetChanged();  //обновил список, поле иницилизации
+        notifyDataSetChanged();  //updated list, initiation field
     }
 }

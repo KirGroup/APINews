@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NewsAPI23">
         <activity
-            android:name=".LogoActivity"
+            android:name="com.example.newsapi23.ui.LogoActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,10 +21,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DetailsActivity"
+            android:name="com.example.newsapi23.DetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.newsapi23.MainActivity"
             android:exported="true">
         </activity>
     </application>

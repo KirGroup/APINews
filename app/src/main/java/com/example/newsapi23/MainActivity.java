@@ -6,31 +6,24 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.SearchView;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.newsapi23.domen.Headlines;
 import com.example.newsapi23.domen.ListNewsHeadlines;
-import com.example.newsapi23.domen.NewsHeadlines;
 import com.example.newsapi23.ui.NewsRecycleAdapter;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SelectListener, View.OnClickListener {
     RecyclerView recyclerView;
-    NewsRecycleAdapter adapter; // создает превью, строчку новости.
-    Button btnBusinessField, btnEntertainmentField, btnGeneralField, btnHealthField, btnScienceField, btnSportField, btnTechnologyField;
-    SearchView searchView; // вьюшка для поика
-    MainViewModel viewModel; // контэйнер состояния, всех данных
-    private static List<ListNewsHeadlines> mFavoriteNews;
-
+    NewsRecycleAdapter adapter; // creates a preview, a line of news.
+    Button btnFavoriteField, btnBusinessField, btnEntertainmentField, btnGeneralField, btnHealthField, btnScienceField, btnSportField, btnTechnologyField;
+    SearchView searchView; // View for search
+    MainViewModel viewModel; // State maintainer, all data
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +31,9 @@ public class MainActivity extends AppCompatActivity implements SelectListener, V
         setContentView(R.layout.activity_main);
 
         searchView = findViewById(R.id.search);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() { //слушатель поля ввода поиска
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() { //search input field listener
             @Override
-            public boolean onQueryTextSubmit(String query) {  //слушатель кнопки поиска
+            public boolean onQueryTextSubmit(String query) {  //search button listener
                 viewModel.search(query);
                 return true;
             }
@@ -51,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements SelectListener, V
             }
         });
 
+        btnFavoriteField = findViewById(R.id.btn_favorite);
+        btnFavoriteField.setOnClickListener(this);
         btnBusinessField = findViewById(R.id.btn_business);
         btnBusinessField.setOnClickListener(this);
         btnEntertainmentField = findViewById(R.id.btn_entertainment);
@@ -75,18 +70,8 @@ public class MainActivity extends AppCompatActivity implements SelectListener, V
     }
 
     private void setupViewModel() {
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class); //создает менеджер для получения вьюмодел с данными
-        viewModel.newsData.observe(this, this::showNews);/*new Observer<List<ListNewsHeadlines>>() { //все запросы беруться из viewModel
-
-            @Override
-            public void onChanged (List <ListNewsHeadlines> newsEntries) {
-                mFavoriteNews = newsEntries;
-                for (int i = 0; i < mFavoriteNews.size(); i++) {
-                    mFavoriteNews.get(i).setFavoriteStatus(true);
-                }
-                adapter.setNews(mFavoriteNews);
-            }
-        });*/
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class); //creates a manager to retrieve data models
+        viewModel.newsData.observe(this, this::showNews);
     }
 
         private void showNews (List < ListNewsHeadlines > list) {
@@ -114,6 +99,6 @@ public class MainActivity extends AppCompatActivity implements SelectListener, V
     public void onClick(View view) {
         Button btn = (Button) view;
         String category = btn.getText().toString();
-        viewModel.searchCategory(category); // беру текст  кнопки и вставляю её в поик категорий
+        viewModel.searchCategory(category); // I take the text of the button and paste it into the categories
     }
 }

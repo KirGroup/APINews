@@ -1,4 +1,4 @@
-package com.example.newsapi23.Models;
+package com.example.newsapi23.domen;
 
 import java.io.Serializable;
 

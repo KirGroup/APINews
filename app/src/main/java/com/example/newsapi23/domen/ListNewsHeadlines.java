@@ -1,6 +1,6 @@
 package com.example.newsapi23.domen;
 
-public class ListNewsHeadlines extends NewsHeadlines{ //класс обёртка, с доп. параметром Избранное. Кастомный класс
+public class ListNewsHeadlines extends NewsHeadlines{ //wrapper class, with an additional Favorites parameter. Custom class
     private boolean isFavorite;
 
     public ListNewsHeadlines(NewsHeadlines newsHeadlines, boolean isFavorite){
@@ -16,4 +16,8 @@ public class ListNewsHeadlines extends NewsHeadlines{ //класс обёртк�
         isFavorite = favorite;
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s_______%s", String.valueOf(isFavorite), getUrl());
+    }
 }

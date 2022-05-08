@@ -1,9 +1,9 @@
-package com.example.newsapi23.Models;
+package com.example.newsapi23.domen;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class NewsApiResponce implements Serializable {
+public class Headlines implements Serializable {
     String status;
     int totalResults;
     List<NewsHeadlines> articles;

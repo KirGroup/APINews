@@ -7,6 +7,8 @@ import androidx.room.Query;
 
 import com.example.newsapi23.domen.NewsHeadlines;
 
+import java.util.List;
+
 @Dao
 public interface FavoriteDao {
     @Insert
@@ -18,4 +20,6 @@ public interface FavoriteDao {
     @Query("SELECT EXISTS(SELECT * FROM newsHeadlines WHERE url = :newsUrl)")
     boolean isFavorite(String newsUrl);
 
+    @Query("SELECT * FROM newsheadlines")
+    List<NewsHeadlines> getAll();
 }

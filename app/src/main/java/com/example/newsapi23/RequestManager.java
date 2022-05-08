@@ -1,7 +1,5 @@
 package com.example.newsapi23;
 
-import android.content.Context;
-
 import com.example.newsapi23.domen.Headlines;
 
 import retrofit2.Call;
@@ -26,10 +24,6 @@ public class RequestManager {
             call.enqueue(new Callback<Headlines>() {
                 @Override
                 public void onResponse(Call<Headlines> call, Response<Headlines> response) {
-//                    if (!response.isSuccessful()){
-//                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show(); сделать эту проверкку при получении, снаружи
-//
-//                    }
                     listener.onSuccess(response.body().getArticles(), response.message());
 
                 }
