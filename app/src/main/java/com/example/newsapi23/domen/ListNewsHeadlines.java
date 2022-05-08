@@ -4,7 +4,7 @@ public class ListNewsHeadlines extends NewsHeadlines{ //wrapper class, with an a
     private boolean isFavorite;
 
     public ListNewsHeadlines(NewsHeadlines newsHeadlines, boolean isFavorite){
-        super(newsHeadlines.getSource(), newsHeadlines.getAutor(), newsHeadlines.getTitle(), newsHeadlines.getDescription(), newsHeadlines.getUrl(), newsHeadlines.getUrlToImage(), newsHeadlines.getPublishedAt(), newsHeadlines.getContent());
+        super(newsHeadlines.getSource(), newsHeadlines.getAuthor(), newsHeadlines.getTitle(), newsHeadlines.getDescription(), newsHeadlines.getUrl(), newsHeadlines.getUrlToImage(), newsHeadlines.getPublishedAt(), newsHeadlines.getContent());
         this.isFavorite = isFavorite;
     }
 
@@ -14,10 +14,5 @@ public class ListNewsHeadlines extends NewsHeadlines{ //wrapper class, with an a
 
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("%s_______%s", String.valueOf(isFavorite), getUrl());
     }
 }

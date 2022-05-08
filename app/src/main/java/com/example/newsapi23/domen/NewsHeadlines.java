@@ -11,20 +11,20 @@ import java.io.Serializable;
 public class NewsHeadlines implements Serializable {
     @Ignore
     private Source source = null;
-    private String autor = "";
-    private String title = "";
-    private String description = "";
+    private String author;
+    private String title;
+    private String description;
     @NonNull @PrimaryKey
-    private String url = "";
-    private String urlToImage = "";
-    private String publishedAt = "";
-    private String content = "";
+    private String url;
+    private String urlToImage;
+    private String publishedAt;
+    private String content;
     @Ignore
     private boolean favoriteStatus = false;
 
-    public NewsHeadlines(Source source, String autor, String title, String description, String url, String urlToImage, String publishedAt, String content) {
+    public NewsHeadlines(Source source, String author, String title, String description, @NonNull String url, String urlToImage, String publishedAt, String content) {
         this.source = source;
-        this.autor = autor;
+        this.author = author;
         this.title = title;
         this.description = description;
         this.url = url;
@@ -33,8 +33,8 @@ public class NewsHeadlines implements Serializable {
         this.content = content;
     }
 
-    public NewsHeadlines(String autor, String title, String description, String url, String urlToImage, String publishedAt, String content) {
-        this.autor = autor;
+    public NewsHeadlines(String author, String title, String description, @NonNull String url, String urlToImage, String publishedAt, String content) {
+        this.author = author;
         this.title = title;
         this.description = description;
         this.url = url;
@@ -51,12 +51,12 @@ public class NewsHeadlines implements Serializable {
         this.source = source;
     }
 
-    public String getAutor() {
-        return autor;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setAutor(String autor) {
-        this.autor = autor;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public String getTitle() {
@@ -75,11 +75,12 @@ public class NewsHeadlines implements Serializable {
         this.description = description;
     }
 
+    @NonNull
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(@NonNull String url) {
         this.url = url;
     }
 
@@ -111,11 +112,12 @@ public class NewsHeadlines implements Serializable {
 
     public void setFavoriteStatus(boolean status) {this.favoriteStatus = status;}
 
+    @NonNull
     @Override
     public String toString() {
         return "NewsHeadlines{" +
                 "source=" + source +
-                ", autor='" + autor + '\'' +
+                ", author='" + author + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", url='" + url + '\'' +

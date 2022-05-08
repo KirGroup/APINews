@@ -14,15 +14,12 @@ import com.example.newsapi23.R;
 
 public class LogoActivity extends Activity {
 
-    private Animation logoAnim;
-    private ImageView logoImage;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logo);
-        logoAnim = AnimationUtils.loadAnimation(this, R.anim.logo_anim);
-        logoImage = findViewById(R.id.id_image_start);
+        Animation logoAnim = AnimationUtils.loadAnimation(this, R.anim.logo_anim);
+        ImageView logoImage = findViewById(R.id.id_image_start);
         logoImage.startAnimation(logoAnim);
         startMainActivity();
     }

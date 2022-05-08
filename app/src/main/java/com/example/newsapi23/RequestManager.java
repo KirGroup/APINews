@@ -1,5 +1,7 @@
 package com.example.newsapi23;
 
+import androidx.annotation.NonNull;
+
 import com.example.newsapi23.domen.Headlines;
 
 import retrofit2.Call;
@@ -11,7 +13,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 
-public class RequestManager {
+public class RequestManager { //creates a network request handler and processes requests
 
     Retrofit retrofit = new Retrofit.Builder().baseUrl("https://newsapi.org/v2/").addConverterFactory(GsonConverterFactory.create()).build();
 
@@ -23,12 +25,13 @@ public class RequestManager {
         try {
             call.enqueue(new Callback<Headlines>() {
                 @Override
-                public void onResponse(Call<Headlines> call, Response<Headlines> response) {
-                    listener.onSuccess(response.body().getArticles(), response.message());
-
+                public void onResponse(@NonNull Call<Headlines> call, @NonNull Response<Headlines> response) {
+                    if(response.body()!=null) {
+                        listener.onSuccess(response.body().getArticles(), response.message()); //результат работы, отдаёт листенеру ответ от сервера
+                    }
                 }
                 @Override
-                public void onFailure(Call<Headlines> call, Throwable t) {
+                public void onFailure(@NonNull Call<Headlines> call, @NonNull Throwable t) {
                     listener.onError("Request Failed");
                 }
             });
