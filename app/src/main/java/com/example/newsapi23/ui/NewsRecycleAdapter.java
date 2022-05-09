@@ -52,7 +52,7 @@ public class NewsRecycleAdapter extends RecyclerView.Adapter<CustomViewHolder> {
         return headlines.size();
     }
 
-    @SuppressLint("NotifyDataSetChanged") //можно использовать diffutil!
+    @SuppressLint("NotifyDataSetChanged") //can be used diffutil!
     public void setNews(List<ListNewsHeadlines> list) {
         headlines = list;
         notifyDataSetChanged();  //updated list, initiation field

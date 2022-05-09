@@ -27,7 +27,7 @@ public class RequestManager { //creates a network request handler and processes 
                 @Override
                 public void onResponse(@NonNull Call<Headlines> call, @NonNull Response<Headlines> response) {
                     if(response.body()!=null) {
-                        listener.onSuccess(response.body().getArticles(), response.message()); //результат работы, отдаёт листенеру ответ от сервера
+                        listener.onSuccess(response.body().getArticles(), response.message()); //the result of the work, gives the listener a response from the server
                     }
                 }
                 @Override
